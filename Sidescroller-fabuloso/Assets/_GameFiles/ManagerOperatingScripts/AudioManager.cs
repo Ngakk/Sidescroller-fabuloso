@@ -44,8 +44,8 @@ namespace Mangos {
 				
 				temp.AddComponent<AudioSource>();
 				temp.GetComponent<AudioSource>().clip = clips[i];
-				//temp.AddComponent<DefaultSound>();
-				//temp.GetComponent<DefaultSound>().dj = temp.GetComponent<AudioSource>();
+				temp.AddComponent<DefaultSound>();
+				temp.GetComponent<DefaultSound>().dj = temp.GetComponent<AudioSource>();
 				temp.name = "soundMaker" + i.ToString();
 				sounds.Add(temp);
 				PoolManager.PreSpawn(sounds[i], (int)Mathf.Round(maxSimultaneousClip[i]/2));
