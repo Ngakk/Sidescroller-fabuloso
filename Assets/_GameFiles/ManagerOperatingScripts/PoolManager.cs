@@ -2,99 +2,157 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Mangos{
-	public class PoolManager : MonoBehaviour 
+namespace Mangos
+{
+	public class PoolManager : MonoBehaviour
 	{
-		//Dictionary 
-		//Listas dinamicas Cola Queue
+		//Default Settings
+		private static int defaultPoolLimit = 10;
+		
+		//Diccionarios
 		static Dictionary<int, Queue<GameObject>> pool = new Dictionary<int, Queue<GameObject>>();
-		//Crear un contenedor
+		static Dictionary<int, int> poolLimit = new Dictionary<int, int>();
 		static Dictionary<int, GameObject> poolHolder = new Dictionary<int, GameObject>();
-		//limites de cada pool
-		static Dictionary<int,int> poolLimit = new Dictionary<int, int>();
-
-	    //Clear Pools
-	    public static void ClearPools()
-	    {
-	        pool.Clear();
-	        poolHolder.Clear();
-	        poolLimit.Clear();
-	    }
-
-	    //Pre Spawn 
-	    public static void PreSpawn(GameObject prefab, int amount)//Cuantos
+		static Dictionary<int, bool> poolRecycle = new Dictionary<int, bool>();
+		
+		//Delete All Pool Objects
+		public static void ClearPools()
 		{
-			//Crear la cola de objetos o el pool
-			MakePool(prefab);
-			//For 0 a tantos y creamos objetos
-			//Agregar a la cola la cantidad de elementos iniciales del tipo prefab
-			//Se crean N instancias iniciales
-			for(int i = 0; i < amount; i++)
+			pool.Clear();
+			poolLimit.Clear();
+			poolHolder.Clear();
+			//TODO Delete objects
+		}
+		
+		//Crear el Pool (Dictionary)
+		public static void MakePool(GameObject prefab, int limit, int preSpawnObjects, bool recycle)
+		{
+			//Crear una cola, para guardar TODOS los objetos que sean del mismo tipo (segun su ID)
+			if(!pool.ContainsKey(prefab.GetInstanceID()))
 			{
-				//Crear un objeto en el indice i
-				AddNewItemToQueue(prefab, i);	
+				pool.Add(prefab.GetInstanceID(), new Queue<GameObject>());	
+				poolHolder.Add(prefab.GetInstanceID(), new GameObject("_Pool["+prefab.name+"]"));
+				SetPoolRecycle(prefab, recycle);
+				SetPoolLimit(prefab, limit);
+				
+				PreSpawn(prefab,preSpawnObjects,false);
 			}
 		}
-		//AgregarItems
-		private static void AddNewItemToQueue(GameObject prefab, int i)
+		
+		public static void MakePool(GameObject prefab, int limit, int preSpawnObjects)
 		{
-			//Crear un GO Instantiate
-			GameObject go = (GameObject)Instantiate(prefab);
-			//Datos
-			go.name = go.name + "_PoolInstance("+i+")";
-			//Meterlo al pool o dictionary que le corresponde
+			MakePool(prefab,limit,preSpawnObjects,false);
+		}
+		
+		public static void MakePool(GameObject prefab, int limit)
+		{
+			MakePool(prefab, limit, 0);
+		}
+		
+		public static void MakePool(GameObject prefab)
+		{
+			MakePool(prefab, defaultPoolLimit);
+		}
+		
+		public static void SetPoolLimit(GameObject prefab, int newLimit)
+		{
+			//Si el pool ya existe, ponemos un limite
+			if(poolLimit.ContainsKey(prefab.GetInstanceID()))
+			{
+				poolLimit[prefab.GetInstanceID()] = newLimit;
+			}
+			else //Si no existe, creamos un Pool
+			{
+				poolLimit.Add(prefab.GetInstanceID(), newLimit);
+			}
+		}
+		
+		public static void SetPoolRecycle(GameObject prefab, bool recycle)
+		{
+			if(poolRecycle.ContainsKey(prefab.GetInstanceID()))
+			{
+				poolRecycle[prefab.GetInstanceID()] = recycle;
+			}
+			else //Si no existe, creamos un Pool
+			{
+				poolRecycle.Add(prefab.GetInstanceID(), recycle);
+			}
+		}
+		
+		//Instantiate Controlado
+		private static void AddNewItemToQueue(GameObject prefab, int id)
+		{
+			//Crear el objeto en la escena y ponerle un nombre
+			GameObject go = GameObject.Instantiate(prefab);
+			go.name = go.name + "_PoolInstance("+id+")";
+			
+			//Meter el objeto al Diccionario
 			pool[prefab.GetInstanceID()].Enqueue(go);
-			//Apagar la instancia
 			go.SetActive(false);
-			//Crear un Manager o contenedor de objetos
 			go.transform.parent = poolHolder[prefab.GetInstanceID()].transform;
 		}
 		
-		//TODO crear funcion para quitar un item del Queue / pool (No es muy necesario hacerlo)
-		
-		//Metodos publicos para llamar al Pool
-		public static Transform Spawn(GameObject prefab, Vector3 position, Quaternion rotation)// va ser como un Instantiate
+		public static void PreSpawn(GameObject prefab, int amount, bool increaseLimit)
 		{
-			//Logica para crear un objeto y quitar el que no se necesite
-			//ver si ya existe algun pool con este tipo de objeto
+			//Crear un pool con el tamaño del prespawn
+			MakePool(prefab);
+			
+			if(increaseLimit)
+			{
+				//if(poolLimit.ContainsKey(prefab.GetInstanceID()))
+				if(amount>poolLimit[prefab.GetInstanceID()])
+				{
+					SetPoolLimit(prefab,amount);
+				}
+			}
+			
+			//Crear For
+			for(int i=0; (i<amount) && (i<poolLimit[prefab.GetInstanceID()]) ; i++)
+			{
+				AddNewItemToQueue(prefab, i);
+			}
+		}
+		
+		//Equivalente a Instantiate
+		public static Transform Spawn(GameObject prefab, Vector3 position, Quaternion rotation)
+		{
+			//Ver si ya existe algun pool con este tipo de objeto
 			if(pool.ContainsKey(prefab.GetInstanceID()))
 			{
-				//Si ya existe el pool, se toma el siguiente en la cola, para ser utilizado
-				//ver si hay objetos disponibles	
+				//Si ya existe el pool, se tomar el siguiente en la cola, para ser utilizado
 				bool areAnyAvailable = false;
-				//TODO cambiar este for por otra logica para que siempre revise el siguiente
-				for(int i = 0; i < pool[prefab.GetInstanceID()].Count; i++)
+				//Ver si hay objetos disponibles
+				//Recorre los objetos en la cola, y ve si alguno esta apagado, y envia los que esten prendidos al final.
+				for(int i=0;i<pool[prefab.GetInstanceID()].Count; i++)
 				{
-					if(pool[prefab.GetInstanceID()].Peek().activeSelf )
+					//Si el objeto esta activo (osea que esta siendo utilizado)
+					if(pool[prefab.GetInstanceID()].Peek().activeSelf)
 					{
-						//Esta en uso este objeto, hay que pasarlo al final de la cola
+						//Tomar el siguiente en la cola, y pasarlo al final
 						GameObject tmp_go = pool[prefab.GetInstanceID()].Dequeue();
 						pool[prefab.GetInstanceID()].Enqueue(tmp_go);
 					}
-					else
+					else //el siguiente no esta activo (esta disponible para ser usado)
 					{
-						//Si hay un objeto disponible
 						areAnyAvailable = true;
 						break;
 					}
 				}
 				
-				//si no hay objetos, hay que ver si el pool esta lleno
+				//Si no hay objetos disponibles
 				if(areAnyAvailable==false)
 				{
-					//Ver si el pool esta lleno
+					//-- Ver si el pool esta lleno
 					if(pool[prefab.GetInstanceID()].Count < poolLimit[prefab.GetInstanceID()])
 					{
-						//Esta lleno pero aun hay espacio en el limite
-						//Todos los objetos estan en uso, hay que crear uno nuevo 
-						//crear un objeto de ese tipo y meterlo al pool
-						//Crear una copia temporal de los objetos en un array
+						//---- Si el pool aun tiene espacio, entonces crear un nuevo objeto y meterlo al pool		
+						//Clonamos el Pool en un Array temporal
 						var items = pool[prefab.GetInstanceID()].ToArray();
-						//limpiar la cola actual
+						//Limpiamos
 						pool[prefab.GetInstanceID()].Clear();
-						//Meter al nuevo objeto
+						//Agregamos el nuevo item al inicio de la Cola
 						AddNewItemToQueue(prefab,items.Length);
-						//Regresar a los que estaban originalmente pero un lugar atras, para que el nuevo sea el siguiente
+						//Agregamos todos los que ya habian despues del nuevo
 						foreach(var item in items)
 						{
 							pool[prefab.GetInstanceID()].Enqueue(item);
@@ -102,71 +160,72 @@ namespace Mangos{
 					}
 					else
 					{
-						//Todos estan en uso y a demas ya no puede crecer mas el pool
-						return null;
+						//---- Si el pool ya esta lleno, SALIR
+						//Opcional, Despawnear al mas viejo y regresarlo si queremos que sea ciclico
+						if(poolRecycle[prefab.GetInstanceID()]==true)
+						{
+							areAnyAvailable = true;
+							/*
+							GameObject tmp_go = pool[prefab.GetInstanceID()].Dequeue();
+							pool[prefab.GetInstanceID()].Enqueue(tmp_go);
+							return tmp_go.transform;
+							*/
+						}
+						else
+						{
+							return null;	
+						}
 					}
 				}
-				
-				//Simular un Instantiate
-				//Regresar al siguiente disponible
+				//Si es que hay objetos disponibles
 				GameObject go = pool[prefab.GetInstanceID()].Dequeue();
-
-				//Asignarle los valores que pide el usuario a posicion y rotacion
+				
+				//Antes de activarlo le ponemos en la posicion y rotacion deseada
 				go.transform.position = position;
 				go.transform.rotation = rotation;
-				//Activar el objeto 
+				
+				//Activamos el siguiente objeto en la cola
 				go.SetActive(true);
-				//Avisar al objeto que se acaba de crear que ha sido recien instanciado, es como un Start Fake
-				go.SendMessage("OnSpawn", SendMessageOptions.DontRequireReceiver);
-				//Volverlo a meter al final de la cola
+				
+				//Avisar a la instancia del objeto que ya fue spawneado
+				go.SendMessage("OnSpawn",SendMessageOptions.DontRequireReceiver);
+				
+				//Lo regresamos a la cola
 				pool[prefab.GetInstanceID()].Enqueue(go);
-				//Opcional
-				//Podria sacarlo del objeto del queue, del contenedor
-				//go.transform.parent = null;
-				//regreso la referencia al objeto instanciado
+				//Simplemente regresamos la referencia al siguiente objeto en la cola
 				return go.transform;
 			}
-			else// si no existe hay que crearlo
+			else//En el caso de que es el primer objeto que nos piden, y no existe el pool, Creamos un Pool con valores default
 			{
-				//Crear un pool
-				PreSpawn(prefab,2);
-				return Spawn(prefab, position, rotation);
+				MakePool(prefab);
+				//Recursivamente volver a pedir un objeto
+				return Spawn(prefab,position,rotation);
 			}
+			
+			//Regresar la referencia al transform del proximo objeto en el Pool
+			//return new GameObject("Nothing").transform;
 		}
-		//Esto va a ser similar a un Destroy
+		
 		public static void Despawn(GameObject prefab)
 		{
-			//Ocultar al objeto
-			prefab.SendMessage("OnDespawn", SendMessageOptions.DontRequireReceiver);
+			//Ocultar el objeto que se quita
+			//Y avisar a la instancia que fue removido
+			prefab.SendMessage("OnDespawn",SendMessageOptions.DontRequireReceiver);
 			prefab.SetActive(false);
-		}
-		
-		//Metodo para crear un pool de uso interno para que todo sea mas facil
-		private static void MakePool(GameObject prefab)
-		{
-	        //Crear una nueva cola, para guardar TODOS los objetos que sean de este mismo tipo
-	        //Crear los diccionarios para referenciar despues
-	        if (!poolLimit.ContainsKey(prefab.GetInstanceID()))
-	        {
-	            pool.Add(prefab.GetInstanceID(), new Queue<GameObject>());
-	            poolHolder.Add(prefab.GetInstanceID(), new GameObject("_Pool[" + prefab.name + "]"));
-	            poolLimit.Add(prefab.GetInstanceID(), 5);
-	        }
-		}
-		
-		//Configurar el limite del pool, una especie de constructor
-		public static void SetPoolLimit(GameObject prefab, int newLimit)
-		{
-			//Si el pool ya existe ponemos el limite
-			if(poolLimit.ContainsKey(prefab.GetInstanceID()))
-			{
-				poolLimit[prefab.GetInstanceID()] = newLimit;
-			}
-			else
-			{
-				//Si no existe, creamos un pool con este limite
-				poolLimit.Add(prefab.GetInstanceID(), newLimit);
-			}
 		}
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
