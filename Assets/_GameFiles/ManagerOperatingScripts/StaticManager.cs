@@ -13,21 +13,22 @@ namespace Mangos {
 		running,
 		loading
 	}
-	
-	public enum Weapon{
-		sniper,
-		granade,
-		axe,
-		homeRun
-	}
 
-	public struct HitData{
-		public Weapon weapon;
-		public Vector3 shooterPos;
-		public Vector3 hitPos;
-		public float power;
-		public RaycastHit rayHit;
-	}
+    public enum LimitType
+    {
+        hard,
+        screen,
+        highlight
+    }
+
+    public enum Dir : int
+    {
+        up,
+        right,
+        down,
+        left
+    }
+
 
     public class StaticManager
     {
