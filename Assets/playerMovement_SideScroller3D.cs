@@ -13,19 +13,24 @@ public class playerMovement_SideScroller3D : MonoBehaviour {
     public float fallMultiplier;
     public float lowJumpMultiplier;
     public GameObject EmptyBlink;
+    public GameObject BlinkTarget;
     public bool floorBool;
     private Rigidbody rigi;
     private float m_Horizontal;
     private float m_Vertical;
     private float cam_Horizontal;
     private float cam_Vertical;
-    private float blinkDistance;
+    public float blinkDistance;
     private bool m_Jump;
     private bool jumpReq;
     [Range(0, 1)]
     public float desacceleration;
     public bool wallCheck;
     public int jumpCount;
+    public Vector3 playerSize;
+    private Vector3 blinkPosition;
+    private int blinks;
+    private bool blinkAvailable;
 
     List<ContactPoint> objectsTouched = new List<ContactPoint>();
 
@@ -33,28 +38,45 @@ public class playerMovement_SideScroller3D : MonoBehaviour {
     void Start()
     {
         rigi = GetComponent<Rigidbody>();
-        blinkDistance = 10.0f;
+        playerSize = gameObject.GetComponent<MeshRenderer>().bounds.extents;
+        blinkAvailable = true;
+        blinks = 3;
     }
 
     void Update()
     {
+        //DECLARACION DE VARIABLES
         m_Horizontal = Input.GetAxis("Horizontal");
         m_Vertical = Input.GetAxis("Vertical");
         cam_Horizontal = Input.GetAxis("Cam_Horizontal");
         cam_Vertical = Input.GetAxis("Cam_Vertical");
+
+        //RAY CAST FOR BLINK
+        blinkPosition = new Vector3(m_Horizontal * 3, m_Vertical * 3, 0f).normalized * 3f;
         RaycastHit hit;
-        Ray blinkCheckRay = new Ray(EmptyBlink.transform.position, new Vector3 (m_Horizontal * 3,m_Vertical * 3, 0f));
-        Debug.DrawRay(EmptyBlink.transform.position, new Vector3(m_Horizontal * 2,m_Vertical * 2, 0f));
+        Ray blinkCheckRay = new Ray(EmptyBlink.transform.position, blinkPosition);
+        Debug.DrawRay(EmptyBlink.transform.position, blinkPosition);
+
+        //RAYCAST HELPER
+        BlinkTarget.transform.position = EmptyBlink.transform.position + blinkPosition;
+
+        if (Input.GetButtonDown("Blink"))
+        {
+            Blink();
+            blinks--;
+            if(blinks <= 0)
+            {
+                blinkAvailable = false;
+                StartCoroutine("BlinkAproveAvailability");
+            }
+        }
+
+        //INPUT JUMP
         if (Input.GetButtonDown("Jump")/* && groundTouched.Count != 0*/)
         {
             jumpCount++;
             if(jumpCount <= 1)
             jumpReq = true;
-        }
-
-        if(floorBool == false)
-        {
-            AirDesacceleration();
         }
     }
 
@@ -142,11 +164,28 @@ public class playerMovement_SideScroller3D : MonoBehaviour {
         }
     }
 
-    public void AirDesacceleration()
+    public void Blink()
     {
-        if(rigi.velocity.x > 0)
-            rigi.velocity = new Vector3(rigi.velocity.x * -desacceleration * Time.deltaTime, rigi.velocity.y, rigi.velocity.z);
-        else
-            rigi.velocity = new Vector3(rigi.velocity.x * desacceleration * Time.deltaTime, rigi.velocity.y, rigi.velocity.z);
+        if(blinkAvailable == true)
+        {
+            if (Physics.CheckBox(EmptyBlink.transform.position + blinkPosition, playerSize) == false)
+            {
+                rigi.velocity = new Vector3(rigi.velocity.x, 0f, rigi.velocity.z);
+                gameObject.transform.Translate(BlinkTarget.transform.localPosition / 2);
+            }
+            else
+            {
+                //float closestPos = Physics.ClosestPoint();
+                gameObject.transform.Translate(BlinkTarget.transform.localPosition);
+            }
+        }
     }
+
+    IEnumerator BlinkAproveAvailability()
+    {
+        yield return new WaitForSeconds(3f);
+        blinks = 3;
+        blinkAvailable = true;
+    }
+
 }
