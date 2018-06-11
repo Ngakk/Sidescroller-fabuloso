@@ -31,6 +31,7 @@ public class playerMovement_SideScroller3D : MonoBehaviour {
     private Vector3 blinkPosition;
     private int blinks;
     private bool blinkAvailable;
+    public bool facingRight;
 
     List<ContactPoint> objectsTouched = new List<ContactPoint>();
 
@@ -59,6 +60,15 @@ public class playerMovement_SideScroller3D : MonoBehaviour {
 
         //RAYCAST HELPER
         BlinkTarget.transform.position = EmptyBlink.transform.position + blinkPosition;
+
+        if(m_Horizontal < 0)
+        {
+            facingRight = true;
+        }
+        else if(m_Horizontal > 0)
+        {
+            facingRight = false;
+        }
 
         if (Input.GetButtonDown("Blink"))
         {

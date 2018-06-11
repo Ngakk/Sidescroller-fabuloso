@@ -16,8 +16,10 @@ namespace Mangos
 		Vector3[] DirVec;
 		Vector3 desiredTarget;
 		Vector3 offset;
-		public float width; 
-		float height, radius;
+        public Vector2 offsetCamToPlayer;
+        public float sideOffset;
+		public float width;
+        float height, radius;
 
         private void Start()
         {
@@ -31,9 +33,10 @@ namespace Mangos
 			DirVec [3] = Vector3.left;
 			height = (width / 16) * 9;
 			radius = height * 0.675f;
+
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
             CheckBounds();
 			SetDesiredTarget ();
@@ -48,6 +51,7 @@ namespace Mangos
 				limitedHard [i] = false;
 				limitedSoft [i] = true;
 			}
+            int softCount = 0;
 			for (int i = 0; i < limites.Length; i++) {		//i es para recorrer todos los limites, j sera para reccorrer los arreglos de direcciones (de tamaño 4)
 				if (limites [i].type != LimitType.highlight) {	
 					bool[] inOrOut = limites [i].checkBounds (transform.position.x, transform.position.y, width, height); //Pregunta si el cuadro de la camara esta saliendo de los cuadros de limite y regresa yn arreglo tamaño 4, diciendo en que direccion se esta saliendo ([up, right, down, left])
@@ -61,7 +65,8 @@ namespace Mangos
 						}
 						break;
 					case LimitType.soft:					//De estos puede haber varios en la escena, la camara se podra mover en la union de los limites
-						for (int j = 0; j < 4; j++) {		
+						for (int j = 0; j < 4; j++) {
+                            softCount++;
 							if (!inOrOut [j])
 								limitedSoft [j] = false;
 						}
@@ -72,27 +77,32 @@ namespace Mangos
 				}
 			}
 
-			for (int i = 0; i < 4; i++) {
-				if (limitedSoft [i])
-					Debug.Log ("LimitedSoft[" + i + "] is true");
-			}
+            if (softCount == 0)
+                for (int i = 0; i < 4; i++)
+                    limitedSoft[i] = false;
+			
         }   
 
 		private void SetDesiredTarget(){
 			desiredTarget = Vector3.zero;
 			bool beingOffseted = false;
+            float sayuu;
+            if (!target.GetComponent<playerMovement_SideScroller3D>().facingRight)
+                sayuu = sideOffset;
+            else
+                sayuu = -sideOffset;
 			//Falta ajustar el dt con respecto a la direccion a la que esta mirando el jugador
 			for (int i = 0; i < limites.Length; i++) {		//i es para recorrer todos los limites, j sera para reccorrer los arreglos de direcciones (de tamaño 4)
 				if (limites [i].type == LimitType.highlight) {
 					Vector3 temp = limites [i].checkProximity (target.transform.position.x, target.transform.position.y, radius);
 					if (temp != Vector3.zero) {
-						offset += temp * offsetSpeed * Time.deltaTime;
+						offset += temp * offsetSpeed * Time.fixedDeltaTime;
 						beingOffseted = true;
 					}
 				}
 			}
 			if (!beingOffseted)
-				offset -= offset.normalized * offsetSpeed * Time.deltaTime * radius;
+				offset -= offset.normalized * offsetSpeed * Time.fixedDeltaTime * radius;
 				
 
 			if (offset.magnitude <= 0.01f)
@@ -101,8 +111,8 @@ namespace Mangos
 			if (offset.magnitude > radius*0.6f) {
 				offset = offset.normalized * radius*0.6f;
 			}
-
-			desiredTarget = target.transform.position + offset;
+                            //posicion del jugador    offset de limites         offset default                                  offset de direccion            
+			desiredTarget = target.transform.position + offset + new Vector3(offsetCamToPlayer.x,  offsetCamToPlayer.y, 0) + (Vector3.right * sayuu);
 		}
 
 		private void Move(){
@@ -110,16 +120,11 @@ namespace Mangos
 				if (!limitedHard [i] && !limitedSoft[i]) {
 					Vector3 moving = Vector3.Scale ((desiredTarget - transform.position), DirVec [i]);
 					if (moving [(i+1)%2] > 0) {
-						transform.position += Vector3.Scale ((desiredTarget- transform.position), DirVec [i % 2]) * speeds [i] * Time.deltaTime;
+						transform.position += Vector3.Scale ((desiredTarget- transform.position), DirVec [i % 2]) * speeds [i] * Time.fixedDeltaTime;
 					}
 				}
 			}
 		}
-
-        private void FixedUpdate()
-        {
-            
-        }
 
 		public void DrawLines()
 		{
@@ -133,10 +138,10 @@ namespace Mangos
 
 			color = Color.black;
 
-			Debug.DrawLine(upRight, upLeft, color, Time.deltaTime, false);
-			Debug.DrawLine(upLeft, downLeft, color, Time.deltaTime, false);
-			Debug.DrawLine(upRight, downRight, color, Time.deltaTime, false);
-			Debug.DrawLine(downLeft, downRight, color, Time.deltaTime, false);
+			Debug.DrawLine(upRight, upLeft, color, Time.fixedDeltaTime, false);
+			Debug.DrawLine(upLeft, downLeft, color, Time.fixedDeltaTime, false);
+			Debug.DrawLine(upRight, downRight, color, Time.fixedDeltaTime, false);
+			Debug.DrawLine(downLeft, downRight, color, Time.fixedDeltaTime, false);
 
 
 			for (int i = 0; i < 16; i++) {
