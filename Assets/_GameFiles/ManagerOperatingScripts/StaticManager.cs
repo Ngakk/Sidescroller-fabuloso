@@ -17,8 +17,10 @@ namespace Mangos {
     public enum LimitType
     {
         hard,
+		soft,
         screen,
-        highlight
+        highlight,
+		none
     }
 
     public enum Dir : int
