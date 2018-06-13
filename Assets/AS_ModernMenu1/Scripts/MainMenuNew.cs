@@ -3,8 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 
 public class MainMenuNew : MonoBehaviour {
-
-	public Animator CameraObject;
+    
 	public GameObject PanelControls;
 	public GameObject PanelVideo;
 	public GameObject PanelGame;
@@ -42,15 +41,6 @@ public class MainMenuNew : MonoBehaviour {
 		continueBtn.gameObject.active = false;
 		newGameBtn.gameObject.active = false;
 		loadGameBtn.gameObject.active = false;
-	}
-
-	public void  Position2 (){
-		DisablePlayCampaign();
-		CameraObject.SetFloat("Animate",1);
-	}
-
-	public void  Position1 (){
-		CameraObject.SetFloat("Animate",0);
 	}
 
 	public void  GamePanel (){
