@@ -29,7 +29,7 @@ public class playerMovement_SideScroller3D : MonoBehaviour {
     public int jumpCount;
     public Vector3 playerSize;
     private Vector3 blinkPosition;
-    private int blinks;
+    public int blinks;
     private bool blinkAvailable;
     public bool facingRight;
 
