@@ -11,5 +11,16 @@ namespace Mangos
             base.OnActionDown();
             Debug.Log("AR action down");
         }
+
+        public override void PreSpawnSpawnables()
+        {
+            base.PreSpawnSpawnables();
+        }
+
+        public override void OnActionHold()
+        {
+            base.OnActionHold();
+            InaccurateShoot();
+        }
     }
 }
