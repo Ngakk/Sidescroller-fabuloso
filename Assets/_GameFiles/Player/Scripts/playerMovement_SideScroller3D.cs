@@ -6,6 +6,7 @@ namespace Mangos
 {
     public class playerMovement_SideScroller3D : MonoBehaviour
     {
+        public Camera cam;
         public float maximumSpeed;
         [SerializeField]
         private float currentAcceleration;
@@ -60,13 +61,21 @@ namespace Mangos
             cam_Vertical = Input.GetAxis("Cam_Vertical");
 
             //RAY CAST FOR BLINK
-            blinkPosition = new Vector3(m_Horizontal * 3, m_Vertical * 3, 0f).normalized * 3f;
+            if (Input.GetJoystickNames().Length > 0)
+            {
+                blinkPosition = new Vector3(cam_Horizontal, cam_Vertical, 0f).normalized * 3f;
+            }
+            else
+            {
+                blinkPosition = Vector3.Scale(Input.mousePosition - cam.WorldToScreenPoint(EmptyBlink.transform.position), new Vector3(1f, 1f, 0f)).normalized * 3f;
+            }
             RaycastHit hit;
             Ray blinkCheckRay = new Ray(EmptyBlink.transform.position, blinkPosition);
             Debug.DrawRay(EmptyBlink.transform.position, blinkPosition);
 
             //RAYCAST HELPER
             BlinkTarget.transform.position = EmptyBlink.transform.position + blinkPosition;
+            gameObject.GetComponentInChildren<WeaponManager>().gameObject.transform.LookAt(BlinkTarget.transform);
 
             if (m_Horizontal < 0)
             {

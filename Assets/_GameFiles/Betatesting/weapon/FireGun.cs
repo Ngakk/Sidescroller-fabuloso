@@ -15,8 +15,8 @@ namespace Mangos
         public override void PreSpawnSpawnables()
         {
             base.PreSpawnSpawnables();
-            PoolManager.SetPoolLimit(bullet, 40);
             PoolManager.PreSpawn(bullet, 20, false);
+            PoolManager.SetPoolLimit(bullet, 40);
         }
 
         public override void OnActionDown()
@@ -45,7 +45,7 @@ namespace Mangos
             if (Time.time > lastShootTime + fireRate)
             {
                 lastShootTime = Time.time;
-                Transform go = PoolManager.Spawn(bullet, spawnPoint.position, Quaternion.identity);
+                Transform go = PoolManager.Spawn(bullet, spawnPoint.transform.position, Quaternion.identity);
                 go.gameObject.GetComponent<Rigidbody>().AddForce(base.getShootDir() * shootingForce, ForceMode.Impulse);
             }
         }
@@ -60,7 +60,7 @@ namespace Mangos
                 Vector3 offsetAngle = new Vector3(Mathf.Cos(inaccuracy * Mathf.Deg2Rad), Mathf.Sin(inaccuracy * Mathf.Deg2Rad));
                 Vector3 dir = Quaternion.Euler(0, 0, inaccuracy) * base.getShootDir();
 
-                Transform go = PoolManager.Spawn(bullet, spawnPoint.position, Quaternion.identity);
+                Transform go = PoolManager.Spawn(bullet, spawnPoint.transform.position, Quaternion.identity);
                 go.gameObject.GetComponent<Rigidbody>().AddForce(dir.normalized * shootingForce, ForceMode.Impulse);
             }
             

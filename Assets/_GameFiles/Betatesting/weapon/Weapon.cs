@@ -7,7 +7,7 @@ namespace Mangos
     public class Weapon : MonoBehaviour
     {
         public Animator anim;
-        public Transform spawnPoint;
+        public GameObject spawnPoint;
 
         internal int ammo;
 
