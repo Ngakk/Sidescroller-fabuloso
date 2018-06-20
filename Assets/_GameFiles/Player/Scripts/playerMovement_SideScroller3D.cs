@@ -69,7 +69,6 @@ namespace Mangos
             {
                 blinkPosition = Vector3.Scale(Input.mousePosition - cam.WorldToScreenPoint(EmptyBlink.transform.position), new Vector3(1f, 1f, 0f)).normalized * 3f;
             }
-            RaycastHit hit;
             Ray blinkCheckRay = new Ray(EmptyBlink.transform.position, blinkPosition);
             Debug.DrawRay(EmptyBlink.transform.position, blinkPosition);
 
@@ -77,13 +76,26 @@ namespace Mangos
             BlinkTarget.transform.position = EmptyBlink.transform.position + blinkPosition;
             gameObject.GetComponentInChildren<WeaponManager>().gameObject.transform.LookAt(BlinkTarget.transform);
 
-            if (m_Horizontal < 0)
+
+            
+            if (blinkPosition.x < 0)
             {
                 facingRight = true;
             }
-            else if (m_Horizontal > 0)
+            else
             {
                 facingRight = false;
+            }
+
+            if (facingRight)
+            {
+                Quaternion rot = Quaternion.Euler(0, 180, 0);
+                gameObject.transform.rotation = rot;
+            }
+            else
+            {
+                Quaternion rot = Quaternion.Euler(0, 0, 0);
+                gameObject.transform.rotation = rot;
             }
 
             if (Input.GetButtonDown("Blink"))

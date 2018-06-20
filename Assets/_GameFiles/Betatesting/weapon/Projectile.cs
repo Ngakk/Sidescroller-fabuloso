@@ -20,5 +20,15 @@ namespace Mangos
         public virtual void OnSpawn(){
             Invoke("SelfDespawn", lifeTime);
         }
+
+        void OnCollisionEnter(Collision _col)
+        {
+            myCollision();
+        }
+
+        public virtual void myCollision()
+        {
+            SelfDespawn();
+        }
     }
 }
