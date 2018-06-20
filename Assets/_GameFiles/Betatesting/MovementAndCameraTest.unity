@@ -434,6 +434,7 @@ GameObject:
   - component: {fileID: 1626700540}
   - component: {fileID: 1626700539}
   - component: {fileID: 1626700544}
+  - component: {fileID: 1626700545}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -533,6 +534,20 @@ MonoBehaviour:
   offsetCamToPlayer: {x: 0, y: 0}
   sideOffset: 0
   width: 20
+--- !u!114 &1626700545
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1626700538}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b010a2ae89fda84418fa736b138c04d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  traumaHealRate: 0.6
+  MaxOffsetXshake: 5
+  MaxOffsetYshake: 5
 --- !u!1001 &1983473710
 Prefab:
   m_ObjectHideFlags: 0
