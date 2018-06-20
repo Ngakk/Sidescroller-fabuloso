@@ -8,12 +8,12 @@ public class CameraShake : MonoBehaviour {
     public float traumaHealRate;
     public float MaxOffsetXshake, MaxOffsetYshake;
     float xOffsetShake, yOffsetShake;
-    Vector3 previous;
+    Vector3 shaked, antiShaked;
 
     // Use this for initialization
     void Start()
     {
-        previous = transform.position;
+        
     }
 
     // Update is called once per frame
@@ -31,12 +31,17 @@ public class CameraShake : MonoBehaviour {
 
     void Shake()
     {
-        gameObject.transform.position = previous;
-        previous = transform.position;
-        xOffsetShake = MaxOffsetXshake * GetTrauma() * Random.Range(-1, 1);
-        yOffsetShake = MaxOffsetYshake * GetTrauma() * Random.Range(-1, 1);
+        gameObject.transform.position += antiShaked;
+        xOffsetShake = MaxOffsetXshake * GetTrauma() * Mathf.PerlinNoise(Time.time*10, Random.Range(0f, 100f));
+        yOffsetShake = MaxOffsetYshake * GetTrauma() * Mathf.PerlinNoise(-Time.time*10, Random.Range(0f, 100f));
 
-        gameObject.transform.Translate(xOffsetShake, yOffsetShake, 0);
+        shaked.x = xOffsetShake;
+        shaked.y = yOffsetShake;
+        shaked.z = 0;
+
+        antiShaked = -1 * shaked;
+
+        gameObject.transform.position += shaked;
     }
 
     float GetTrauma()
@@ -47,5 +52,7 @@ public class CameraShake : MonoBehaviour {
     public void AddTrauma(float t)
     {
         trauma += t;
+        if (trauma > 1)
+            trauma = 1;
     }
 }
