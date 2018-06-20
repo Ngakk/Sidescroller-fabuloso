@@ -60,6 +60,8 @@ namespace Mangos
             cam_Horizontal = Input.GetAxis("Cam_Horizontal");
             cam_Vertical = Input.GetAxis("Cam_Vertical");
 
+            Debug.Log("x: " + cam_Horizontal + "y: " + cam_Vertical);
+
             //RAY CAST FOR BLINK
             if (Input.GetJoystickNames().Length > 0)
             {
@@ -78,12 +80,9 @@ namespace Mangos
 
 
             
-            if (blinkPosition.x < 0)
-            {
+            if (blinkPosition.x < 0) {
                 facingRight = true;
-            }
-            else
-            {
+            } else {
                 facingRight = false;
             }
 
