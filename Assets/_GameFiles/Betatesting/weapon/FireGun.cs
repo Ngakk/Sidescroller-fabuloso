@@ -28,7 +28,7 @@ namespace Mangos
         public override void OnActionHold()
         {
             base.OnActionHold();
-            Shoot();
+    
         }
 
         public bool DepleteBullet()

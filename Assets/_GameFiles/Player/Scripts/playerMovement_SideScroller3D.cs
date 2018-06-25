@@ -43,7 +43,7 @@ namespace Mangos
 
         void Awake()
         {
-            StaticManager.playerScipt = this;
+            StaticManager.playerScript = this;
         }
 
         void Start()
@@ -240,7 +240,7 @@ namespace Mangos
 
         public Vector3 GetShootDir()
         {
-            return (BlinkTarget.transform.position - EmptyBlink.transform.position).normalized;
+            return (ShotTarget.transform.position - EmptyBlink.transform.position).normalized;
         }
 
     }

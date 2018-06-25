@@ -28,7 +28,7 @@ namespace Mangos
         public virtual void PreSpawnSpawnables() { }
 
         public virtual Vector3 getShootDir() {
-            return StaticManager.playerScipt.GetShootDir();
+            return StaticManager.playerScript.GetShootDir();
         }
         //TODO restar balas, magazines
 

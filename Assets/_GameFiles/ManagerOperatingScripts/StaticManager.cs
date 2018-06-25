@@ -38,7 +38,8 @@ namespace Mangos {
         public static InputManager inputManager;
         public static GameManager gameManager;
         public static AudioManager audioManager;
-        public static playerMovement_SideScroller3D playerScipt;
+        public static playerMovement_SideScroller3D playerScript;
+        public static WeaponManager weaponManager;
     }
 
 }

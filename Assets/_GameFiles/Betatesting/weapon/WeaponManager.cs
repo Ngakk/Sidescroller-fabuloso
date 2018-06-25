@@ -8,6 +8,12 @@ namespace Mangos
     {
         public List<Weapon> myWeapons;
         int currentWeaponId;
+
+        void Awake()
+        {
+            StaticManager.weaponManager = this;
+        }
+
         // Use this for initialization
         void Start()
         {
@@ -76,15 +82,7 @@ namespace Mangos
         //TESTing
         void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Q) || Input.GetKey(KeyCode.JoystickButton4))
-                PreviousWeapon();
-            if (Input.GetKeyDown(KeyCode.E) || Input.GetKey(KeyCode.JoystickButton5))
-                NextWeapon();
-
-            if (Input.GetMouseButtonDown(0))
-                ShootDown();
-            if (Input.GetMouseButton(0))
-                ShootHold();
+            
         }
 
         public void DeleteWeapon(Weapon wpn)
