@@ -18,6 +18,7 @@ namespace Mangos
         public float lowJumpMultiplier;
         public GameObject EmptyBlink;
         public GameObject BlinkTarget;
+        public GameObject ShotTarget;
         public bool floorBool;
         private Rigidbody rigi;
         private float m_Horizontal;
@@ -33,6 +34,7 @@ namespace Mangos
         public int jumpCount;
         public Vector3 playerSize;
         private Vector3 blinkPosition;
+        private Vector3 targetPosition;
         private int blinks;
         private bool blinkAvailable;
         public bool facingRight;
@@ -65,24 +67,34 @@ namespace Mangos
             //RAY CAST FOR BLINK
             if (Input.GetJoystickNames().Length > 0)
             {
-                blinkPosition = new Vector3(cam_Horizontal, cam_Vertical, 0f).normalized * 3f;
+                blinkPosition = new Vector3(m_Horizontal, m_Vertical, 0f).normalized * 3f;
+                if (cam_Horizontal < 0.05 && cam_Vertical < 0.05 && cam_Horizontal > -0.05 && cam_Vertical > -0.05)
+                {
+                    if (m_Horizontal > 0.05 || m_Vertical > 0.05 || m_Horizontal < -0.05 || m_Vertical < -0.05)
+                        targetPosition = blinkPosition;
+                }
+                else
+                    targetPosition = new Vector3(cam_Horizontal, cam_Vertical, 0f).normalized * 3f;
             }
             else
             {
                 blinkPosition = Vector3.Scale(Input.mousePosition - cam.WorldToScreenPoint(EmptyBlink.transform.position), new Vector3(1f, 1f, 0f)).normalized * 3f;
             }
             Ray blinkCheckRay = new Ray(EmptyBlink.transform.position, blinkPosition);
-            Debug.DrawRay(EmptyBlink.transform.position, blinkPosition);
+            Debug.DrawRay(EmptyBlink.transform.position, blinkPosition, Color.blue);
+            Debug.DrawRay(EmptyBlink.transform.position, targetPosition);
 
             //RAYCAST HELPER
             BlinkTarget.transform.position = EmptyBlink.transform.position + blinkPosition;
-            gameObject.GetComponentInChildren<WeaponManager>().gameObject.transform.LookAt(BlinkTarget.transform);
+            ShotTarget.transform.position = EmptyBlink.transform.position + targetPosition;
+            gameObject.GetComponentInChildren<WeaponManager>().gameObject.transform.LookAt(ShotTarget.transform);
 
 
             
-            if (blinkPosition.x < 0) {
+            if (targetPosition.x < 0) {
                 facingRight = true;
-            } else {
+            }
+            else {
                 facingRight = false;
             }
 
@@ -209,7 +221,7 @@ namespace Mangos
                 if (Physics.CheckBox(EmptyBlink.transform.position + blinkPosition, playerSize) == false)
                 {
                     rigi.velocity = new Vector3(rigi.velocity.x, 0f, rigi.velocity.z);
-                    gameObject.transform.Translate(BlinkTarget.transform.localPosition / 2);
+                    gameObject.transform.Translate(BlinkTarget.transform.localPosition);
                 }
                 else
                 {

@@ -76,16 +76,15 @@ namespace Mangos
         //TESTing
         void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Q))
+            if (Input.GetKeyDown(KeyCode.Q) || Input.GetKey(KeyCode.JoystickButton4))
                 PreviousWeapon();
-            if (Input.GetKeyDown(KeyCode.E))
+            if (Input.GetKeyDown(KeyCode.E) || Input.GetKey(KeyCode.JoystickButton5))
                 NextWeapon();
 
             if (Input.GetMouseButtonDown(0))
                 ShootDown();
             if (Input.GetMouseButton(0))
                 ShootHold();
-
         }
 
         public void DeleteWeapon(Weapon wpn)
