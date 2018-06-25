@@ -18,7 +18,6 @@ namespace Mangos
 
         public override void OnActionHold()
         {
-            base.OnActionHold();
             InaccurateShoot();
         }
     }

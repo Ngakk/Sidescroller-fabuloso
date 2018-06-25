@@ -22,13 +22,13 @@ namespace Mangos
         public override void OnActionDown()
         {
             base.OnActionDown();
-            Shoot();
-            Debug.Log("FG action down");    
+            Shoot(); 
         }
 
         public override void OnActionHold()
         {
             base.OnActionHold();
+            Shoot();
         }
 
         public bool DepleteBullet()
