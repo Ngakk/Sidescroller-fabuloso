@@ -141,6 +141,14 @@ public class playerMovement_SideScroller3D : MonoBehaviour {
         }
     }
 
+    private void OnCollisionEnter(Collision _col)
+    {
+        if(_col.contacts[0].normal.y >= 0.9f)
+        {
+            rigi.velocity = new Vector3(rigi.velocity.magnitude * rigi.velocity.x > 0 ? 1 : -1, 0f, 0f);
+        }
+    }
+
     void OnCollisionStay(Collision _col)
     {
         List<ContactPoint> temp = new List<ContactPoint>();
