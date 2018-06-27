@@ -2,9 +2,41 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Mangos
-{
-    public class playerMovement_SideScroller3D : MonoBehaviour
+public class playerMovement_SideScroller3D : MonoBehaviour {
+    public float maximumSpeed;
+    [SerializeField]
+    private float currentAcceleration;
+    public float airAcceleration;
+    public float floorAcceleration;
+    [Range(1, 20)]
+    public float jumpForce;
+    public float fallMultiplier;
+    public float lowJumpMultiplier;
+    public GameObject EmptyBlink;
+    public GameObject BlinkTarget;
+    public bool floorBool;
+    private Rigidbody rigi;
+    private float m_Horizontal;
+    private float m_Vertical;
+    private float cam_Horizontal;
+    private float cam_Vertical;
+    public float blinkDistance;
+    private bool m_Jump;
+    private bool jumpReq;
+    [Range(0, 1)]
+    public float desacceleration;
+    public bool wallCheck;
+    public int jumpCount;
+    public Vector3 playerSize;
+    private Vector3 blinkPosition;
+    public int blinks;
+    private bool blinkAvailable;
+    public bool facingRight;
+
+    List<ContactPoint> objectsTouched = new List<ContactPoint>();
+
+
+    void Start()
     {
         public Camera cam;
         public float maximumSpeed;
@@ -88,7 +120,7 @@ namespace Mangos
             gameObject.GetComponentInChildren<WeaponManager>().gameObject.transform.LookAt(ShotTarget.transform);
 
 
-            
+
             if (targetPosition.x < 0) {
                 facingRight = true;
             }
