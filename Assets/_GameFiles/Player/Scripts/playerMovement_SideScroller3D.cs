@@ -2,41 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class playerMovement_SideScroller3D : MonoBehaviour {
-    public float maximumSpeed;
-    [SerializeField]
-    private float currentAcceleration;
-    public float airAcceleration;
-    public float floorAcceleration;
-    [Range(1, 20)]
-    public float jumpForce;
-    public float fallMultiplier;
-    public float lowJumpMultiplier;
-    public GameObject EmptyBlink;
-    public GameObject BlinkTarget;
-    public bool floorBool;
-    private Rigidbody rigi;
-    private float m_Horizontal;
-    private float m_Vertical;
-    private float cam_Horizontal;
-    private float cam_Vertical;
-    public float blinkDistance;
-    private bool m_Jump;
-    private bool jumpReq;
-    [Range(0, 1)]
-    public float desacceleration;
-    public bool wallCheck;
-    public int jumpCount;
-    public Vector3 playerSize;
-    private Vector3 blinkPosition;
-    public int blinks;
-    private bool blinkAvailable;
-    public bool facingRight;
-
-    List<ContactPoint> objectsTouched = new List<ContactPoint>();
-
-
-    void Start()
+namespace Mangos
+{
+    public class playerMovement_SideScroller3D : MonoBehaviour
     {
         public Camera cam;
         public float maximumSpeed;
@@ -67,10 +35,9 @@ public class playerMovement_SideScroller3D : MonoBehaviour {
         public Vector3 playerSize;
         private Vector3 blinkPosition;
         private Vector3 targetPosition;
-        private int blinks;
+        public int blinks;
         private bool blinkAvailable;
         public bool facingRight;
-
         List<ContactPoint> objectsTouched = new List<ContactPoint>();
 
         void Awake()
@@ -108,7 +75,8 @@ public class playerMovement_SideScroller3D : MonoBehaviour {
             }
             else
             {
-                blinkPosition = Vector3.Scale(Input.mousePosition - cam.WorldToScreenPoint(EmptyBlink.transform.position), new Vector3(1f, 1f, 0f)).normalized * 3f;
+                blinkPosition = Vector3.Scale(Input.mousePosition - cam.WorldToScreenPoint(EmptyBlink.transform.position), new Vector3(1f, 1f, 0f)).normalized * 2f;
+                targetPosition = blinkPosition;
             }
             Ray blinkCheckRay = new Ray(EmptyBlink.transform.position, blinkPosition);
             Debug.DrawRay(EmptyBlink.transform.position, blinkPosition, Color.blue);
@@ -121,10 +89,12 @@ public class playerMovement_SideScroller3D : MonoBehaviour {
 
 
 
-            if (targetPosition.x < 0) {
+            if (targetPosition.x < 0)
+            {
                 facingRight = true;
             }
-            else {
+            else
+            {
                 facingRight = false;
             }
 
