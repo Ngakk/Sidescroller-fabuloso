@@ -2202,7 +2202,7 @@ GameObject:
   m_Layer: 0
   m_Name: LimitRight
   m_TagString: Untagged
-  m_Icon: {fileID: 7866945982896999795, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -2228,6 +2228,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1036295596}
   - component: {fileID: 1036295597}
+  - component: {fileID: 1036295599}
   - component: {fileID: 1036295598}
   m_Layer: 0
   m_Name: "Ara\xF1a"
@@ -2242,8 +2243,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1036295595}
-  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -15.51, y: 6.875, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -15.51, y: 7.21, z: 0}
   m_LocalScale: {x: 3, y: 3, z: 3}
   m_Children:
   - {fileID: 1220396813}
@@ -2253,7 +2254,7 @@ Transform:
   - {fileID: 1018033346}
   m_Father: {fileID: 0}
   m_RootOrder: 7
-  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &1036295597
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2277,7 +2278,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44e5cda42f998af48857f65b7df9c097, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Anim: {fileID: 0}
+  enemieMaxSpeed: 5
+  enemieCurrentAcceleration: 10
+  leftDetector: {fileID: 1634361450}
+  rightDetector: {fileID: 1018033345}
+--- !u!54 &1036295599
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1036295595}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 88
+  m_CollisionDetection: 0
 --- !u!1 &1047192313
 GameObject:
   m_ObjectHideFlags: 0
@@ -2288,9 +2307,9 @@ GameObject:
   - component: {fileID: 1047192316}
   - component: {fileID: 1047192315}
   - component: {fileID: 1047192314}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: EnemieLimits
-  m_TagString: Untagged
+  m_TagString: limit
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2342,9 +2361,9 @@ GameObject:
   - component: {fileID: 1100224777}
   - component: {fileID: 1100224776}
   - component: {fileID: 1100224775}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: EnemieLimits (3)
-  m_TagString: Untagged
+  m_TagString: limit
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4077,7 +4096,7 @@ GameObject:
   m_Layer: 0
   m_Name: LimitLeft
   m_TagString: Untagged
-  m_Icon: {fileID: 7866945982896999795, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -4335,9 +4354,9 @@ GameObject:
   - component: {fileID: 1703180820}
   - component: {fileID: 1703180819}
   - component: {fileID: 1703180818}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: EnemieLimits (1)
-  m_TagString: Untagged
+  m_TagString: limit
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5120,9 +5139,9 @@ GameObject:
   - component: {fileID: 2016931067}
   - component: {fileID: 2016931066}
   - component: {fileID: 2016931065}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: EnemieLimits (2)
-  m_TagString: Untagged
+  m_TagString: limit
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

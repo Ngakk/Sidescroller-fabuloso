@@ -21,7 +21,7 @@ namespace Mangos
             Invoke("SelfDespawn", lifeTime);
         }
 
-        void OnCollisionEnter(Collision _col)
+        void OnTriggerEnter(Collider _col)
         {
             myCollision();
         }
