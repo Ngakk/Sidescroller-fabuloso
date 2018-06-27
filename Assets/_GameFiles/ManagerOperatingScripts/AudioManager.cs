@@ -11,10 +11,6 @@ namespace Mangos {
 		swoosh,
 		metalStrike,
 		emptyShoot,
-		woodCrash,
-		woodHit1,
-		woodHit2,
-		woodHit3
 	}
 	
 	
@@ -51,7 +47,6 @@ namespace Mangos {
 				PoolManager.PreSpawn(sounds[i], (int)Mathf.Round(maxSimultaneousClip[i]/2), false);
 				PoolManager.SetPoolLimit(sounds[i], maxSimultaneousClip[i]);
 			}
-			print("audio manager start ended");
 		}
 		
 		
@@ -75,13 +70,6 @@ namespace Mangos {
 		}
 		public void PlayEmptyShoot(Vector3 pos){
 			PoolManager.Spawn(sounds[(int)soundIndx.emptyShoot], pos, Quaternion.identity);
-		}
-		public void PlayWoodCrash(Vector3 pos){
-			PoolManager.Spawn(sounds[(int)soundIndx.woodCrash], pos, Quaternion.identity);
-		}
-		public void PlayWoodHit(Vector3 pos){
-			int selector = Random.Range(0, 2);
-			PoolManager.Spawn(sounds[(int)soundIndx.woodHit1 + selector], pos, Quaternion.identity);
 		}
 	}
 }

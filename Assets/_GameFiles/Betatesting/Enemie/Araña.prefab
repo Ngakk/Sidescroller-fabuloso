@@ -361,6 +361,7 @@ GameObject:
   - component: {fileID: 65031104776198898}
   - component: {fileID: 54187625019257916}
   - component: {fileID: 114833090166409460}
+  - component: {fileID: 82046352540924446}
   m_Layer: 0
   m_Name: "Ara\xF1a"
   m_TagString: Untagged
@@ -1806,6 +1807,101 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 0.67591906, z: 0.583928}
   m_Center: {x: -1.27766714e-17, y: 0.18795948, z: -0.0022734504}
+--- !u!82 &82046352540924446
+AudioSource:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1670210919297364}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!95 &95727781596886908
 Animator:
   serializedVersion: 3
@@ -1912,3 +2008,7 @@ MonoBehaviour:
   enemieCurrentAcceleration: 10
   leftDetector: {fileID: 1447795766153870}
   rightDetector: {fileID: 1249480399297238}
+  AS: {fileID: 82046352540924446}
+  attack: {fileID: 8300000, guid: 6deb865f5d3994e4e9b1a1341f58679f, type: 3}
+  dead: {fileID: 8300000, guid: 469e0f93deee3314a88507b92af03a2e, type: 3}
+  damaged: {fileID: 8300000, guid: b0f20c79400a777409e79d1863a83caf, type: 3}

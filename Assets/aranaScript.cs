@@ -13,12 +13,17 @@ public class aranaScript : MonoBehaviour {
     private int dir = -1;
     public GameObject leftDetector;
     public GameObject rightDetector;
+    public AudioSource AS;
+    public AudioClip attack;
+    public AudioClip dead;
+    public AudioClip damaged;
 
     // Use this for initialization
     void Start () {
         Rigi = GetComponent<Rigidbody>();
         Anim = GetComponentInChildren<Animator>();
         Anim.SetTrigger("walk");
+        AS = GetComponent<AudioSource>();
 	}
 	
 	// Update is called once per frame
@@ -37,40 +42,59 @@ public class aranaScript : MonoBehaviour {
             Quaternion rot = Quaternion.Euler(0, -90, 0);
             gameObject.transform.rotation = rot;
         }
-
-        if(Elife <= 0)
-        {
-            Anim.SetTrigger("walk");
-            EnemieDead();
-        }
     }
 
     void OnTriggerEnter(Collider _col)
     {
-        if (_col.gameObject.CompareTag("limit"))
+        if(Elife > 0)
         {
-            dir = dir * -1;
-            changeDir = !changeDir;
+            if (_col.gameObject.CompareTag("limit"))
+            {
+                dir = dir * -1;
+                changeDir = !changeDir;
+            }
+
+            if (_col.gameObject.CompareTag("bullet"))
+            {
+                AS.PlayOneShot(damaged);
+                Elife = Elife - 5;
+            }
+
+            if (_col.gameObject.CompareTag("bullet2"))
+            {
+                AS.PlayOneShot(damaged);
+                Elife = Elife - 2;
+            }
+            if (Elife <= 0)
+            {
+                Anim.SetTrigger("walk");
+                EnemieDead();
+            }
         }
-
-        if (_col.gameObject.CompareTag("bullet"))
-            Elife = Elife - 5;
-
-        if (_col.gameObject.CompareTag("bullet2"))
-            Elife = Elife - 2;
     }
 
     void OnCollisionEnter(Collision _col)
     {
-        if(_col.gameObject.CompareTag("Player"))
+        if(Elife > 0)
         {
-            Anim.SetTrigger("Atack");
+            if (_col.gameObject.CompareTag("Player"))
+            {
+                AS.PlayOneShot(attack);
+                Anim.SetTrigger("atack");
+            }
         }
     }
 
     public void EnemieDead()
     {
         dir = 0;
+        StartCoroutine(deadArana());
+    }
+
+    public IEnumerator deadArana()
+    {
+        AS.PlayOneShot(dead);
         Anim.SetTrigger("die");
+        yield return new WaitForSeconds(3f);
     }
 }
