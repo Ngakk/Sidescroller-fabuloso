@@ -20,7 +20,7 @@ public class Paralax : MonoBehaviour {
 		yOffset = (cam.transform.position.y - center.transform.position.y) / zDistance;
 		transform.position = new Vector3 (
 				center.transform.position.x + xOffset,
-				center.transform.position.y + yOffset,
+				center.transform.position.y,
 				-60);
 	}
 }
