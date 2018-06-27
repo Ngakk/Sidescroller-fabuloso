@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Plataforma
   - limit
+  - bullet
+  - bullet2
   layers:
   - Default
   - TransparentFX
