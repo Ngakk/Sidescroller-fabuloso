@@ -125,6 +125,7 @@ namespace Mangos
             //INPUT JUMP
             if (Input.GetButtonDown("Jump")/* && groundTouched.Count != 0*/)
             {
+				GetComponentInChildren<IKController> ().Jump ();
                 jumpCount++;
                 if (jumpCount <= 1)
                     jumpReq = true;
@@ -204,6 +205,7 @@ namespace Mangos
                 jumpCount = 0;
                 currentAcceleration = floorAcceleration;
                 floorBool = true;
+				GetComponentInChildren<IKController> ().DettachFromEarthlyThethers (false);
             }
             else if (_col.contacts[0].normal.x >= 0.9f || _col.contacts[0].normal.x <= -0.9f)
             {
@@ -219,6 +221,7 @@ namespace Mangos
                 {
                     currentAcceleration = airAcceleration;
                     floorBool = true;
+					GetComponentInChildren<IKController> ().DettachFromEarthlyThethers (true);
                 }
             }
         }

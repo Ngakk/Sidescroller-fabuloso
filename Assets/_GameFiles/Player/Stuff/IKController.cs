@@ -7,26 +7,42 @@ namespace Mangos {
 
         Animator anim;
         public Transform trans;
+		Rigidbody rigi;
+		bool becameWind;
+		public float maxVel;
         // Use this for initialization
         void Start() {
+			rigi = GetComponentInParent<Rigidbody> ();
             anim = GetComponent<Animator>();
         }
 
         // Update is called once per frame
         void Update() {
+			anim.SetFloat ("Blend", Mathf.Abs(rigi.velocity.x)/maxVel);
+			if(base && becameWind){
 
+			}
         }
 
         private void OnAnimatorIK(int layerIndex)
         {
             anim.SetIKPosition(AvatarIKGoal.RightHand, trans.position);
-            anim.SetIKPositionWeight(AvatarIKGoal.RightHand, 1);
+            anim.SetIKPositionWeight(AvatarIKGoal.RightHand, 0.75f);
 
             anim.SetIKPosition(AvatarIKGoal.LeftHand, trans.position);
-            anim.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1);
+            anim.SetIKPositionWeight(AvatarIKGoal.LeftHand, 0.75f);
 
             anim.SetLookAtPosition(trans.position);
-            anim.SetLookAtWeight(1, 0.2f, 0.2f, 1, 1);
+            anim.SetLookAtWeight(1, 0.2f, 0.2f, 1, 0.5f);
+
         }
+
+		public void Jump(){
+			anim.SetTrigger ("Jump");
+		}
+
+		public void DettachFromEarthlyThethers(bool b){
+			becameWind = b;
+		}
     }
 }
