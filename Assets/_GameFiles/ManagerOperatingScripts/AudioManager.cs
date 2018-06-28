@@ -5,11 +5,11 @@ using UnityEngine;
 namespace Mangos {	
 	
 	enum soundIndx : int{
-		gunShot = 0,
-		granadeLauncher,
-		explosion,
-		swoosh,
-		metalStrike,
+		mainBasic = 0,
+		machingunn,
+		spiderattack,
+		spiderdamage,
+		spiderdead,
 		emptyShoot,
 	}
 	
@@ -53,23 +53,8 @@ namespace Mangos {
 		public void PlayIndexedSound(int i, Vector3 pos){
 			PoolManager.Spawn(sounds[i], pos, Quaternion.identity);
 		}
-		public void PlayExplosion(Vector3 pos){
-			PoolManager.Spawn(sounds[(int)soundIndx.explosion], pos, Quaternion.identity);
-		}
-		public void PlayGranadaLauncher(Vector3 pos){
-			PoolManager.Spawn(sounds[(int)soundIndx.granadeLauncher], pos, Quaternion.identity);
-		}
-		public void PlayGunShot(Vector3 pos){
-			PoolManager.Spawn(sounds[(int)soundIndx.gunShot], pos, Quaternion.identity);
-		}
-		public void PlaySwoosh(Vector3 pos){
-			PoolManager.Spawn(sounds[(int)soundIndx.swoosh], pos, Quaternion.identity);
-		}
-		public void PlayMetalStrike(Vector3 pos){
-			PoolManager.Spawn(sounds[(int)soundIndx.metalStrike], pos, Quaternion.identity);
-		}
-		public void PlayEmptyShoot(Vector3 pos){
-			PoolManager.Spawn(sounds[(int)soundIndx.emptyShoot], pos, Quaternion.identity);
+		public void PlayBasicShot(Vector3 pos){
+			PoolManager.Spawn(sounds[(int)soundIndx.mainBasic], pos, Quaternion.identity);
 		}
 	}
 }

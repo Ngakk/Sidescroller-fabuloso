@@ -28,7 +28,6 @@ namespace Mangos
         public override void OnActionHold()
         {
             base.OnActionHold();
-    
         }
 
         public bool DepleteBullet()
@@ -44,6 +43,7 @@ namespace Mangos
         {
             if (Time.time > lastShootTime + fireRate)
             {
+                StaticManager.audioManager.PlayBasicShot(StaticManager.playerScript.gameObject.transform.position);
                 lastShootTime = Time.time;
                 Transform go = PoolManager.Spawn(bullet, spawnPoint.transform.position, Quaternion.identity);
                 go.gameObject.GetComponent<Rigidbody>().AddForce(base.getShootDir() * shootingForce, ForceMode.Impulse);

@@ -4,4 +4,20 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/AS_ModernMenu1/OfficialScenes/Menu_Scene.unity
+    guid: 53e0db7c579d54f4da5d360b96be0985
+  - enabled: 1
+    path: Assets/_GameFiles/Betatesting/MovementAndCameraTest.unity
+    guid: 5613a045452cda64dad37c4a14d531e6
+  - enabled: 1
+    path: Assets/_GameFiles/UI/Scenes/Lose.unity
+    guid: a1912a8697779684689bb2e1a0708f64
+  - enabled: 1
+    path: Assets/_GameFiles/UI/Scenes/Credits.unity
+    guid: 304851aa5a3601b49b8da1175c6ea32b
+  - enabled: 1
+    path: Assets/_GameFiles/UI/Scenes/Win.unity
+    guid: 6a4fac69684245141b5777d234c59e98
+  m_configObjects: {}
