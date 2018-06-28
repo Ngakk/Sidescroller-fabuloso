@@ -6,7 +6,7 @@ namespace Mangos {
 	
 	enum soundIndx : int{
 		mainBasic = 0,
-		machingunn,
+		machingunn = 1,
 		spiderattack,
 		spiderdamage,
 		spiderdead,
@@ -23,8 +23,6 @@ namespace Mangos {
 
 		public AudioClip[] clips;
 		public int[] maxSimultaneousClip;
-		public GameObject soundMaker;
-		public int maxSimultaneousSounds;
 		List<GameObject> sounds = new List<GameObject>();
 		
 		
@@ -56,6 +54,10 @@ namespace Mangos {
 		public void PlayBasicShot(Vector3 pos){
 			PoolManager.Spawn(sounds[(int)soundIndx.mainBasic], pos, Quaternion.identity);
 		}
+        public void PlayMetralleta(Vector3 pos)
+        {
+            PoolManager.Spawn(sounds[(int)soundIndx.machingunn], pos, Quaternion.identity);
+        }
 	}
 }
 

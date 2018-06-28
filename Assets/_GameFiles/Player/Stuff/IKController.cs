@@ -9,6 +9,7 @@ namespace Mangos {
         public Transform trans;
 		Rigidbody rigi;
 		bool becameWind;
+        bool walked;
 		public float maxVel;
         // Use this for initialization
         void Start() {
@@ -19,9 +20,23 @@ namespace Mangos {
         // Update is called once per frame
         void Update() {
 			anim.SetFloat ("Blend", Mathf.Abs(rigi.velocity.x)/maxVel);
-			//if(base && becameWind){
+			if(becameWind && rigi.velocity.y < 0){
+                CheckFloor();
+			}
+            if (!becameWind)
+            {
+                Walk();
+            }
+           
+        }
 
-			//}
+        public void Walk()
+        {
+            if (!walked)
+            {
+                anim.SetTrigger("walk");
+                walked = true;
+            }
         }
 
         private void OnAnimatorIK(int layerIndex)
@@ -38,11 +53,31 @@ namespace Mangos {
         }
 
 		public void Jump(){
+            anim.ResetTrigger("Fall");
 			anim.SetTrigger ("Jump");
 		}
 
+        public void Fall()
+        {
+            anim.SetTrigger("Fall");
+        }
+
 		public void DettachFromEarthlyThethers(bool b){
 			becameWind = b;
+            if (becameWind)
+            {
+                walked = false;
+            }
 		}
+
+        public void CheckFloor()
+        {
+            Ray floorCheck = new Ray(gameObject.transform.position, gameObject.transform.position + Vector3.down * 10);
+            RaycastHit hit;
+            if (Physics.Raycast(transform.position, Vector3.down, out hit, Mathf.Abs(rigi.velocity.y) / 0.367f))
+            {
+                Fall();
+            }
+        }
     }
 }
