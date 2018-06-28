@@ -131,9 +131,11 @@ namespace Mangos
             }
 
             if(life <= 0)
-            {
                 SceneManager.LoadScene(3);
-            }
+
+            if (StaticManager.HUD_Script.deadEnemies >= 6)
+                SceneManager.LoadScene(4);
+
         }
 
         void FixedUpdate()
