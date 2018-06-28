@@ -19,7 +19,9 @@ namespace Mangos {
         // Update is called once per frame
         void Update() {
 			anim.SetFloat ("Blend", Mathf.Abs(rigi.velocity.x)/maxVel);
-			if(base && 
+			if(base && becameWind){
+
+			}
         }
 
         private void OnAnimatorIK(int layerIndex)
