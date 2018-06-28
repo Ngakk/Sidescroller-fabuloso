@@ -32,7 +32,6 @@ namespace Mangos{
 		public static bool Circle_v_Circle(float x1, float y1, float r1, float x2, float y2, float r2)
 		{
 			if (Vector2.Distance (new Vector2 (x1, y1), new Vector2 (x2, y2)) <= r1 + r2) {
-				Debug.Log (Vector2.Distance (new Vector2 (x1, y1), new Vector2 (x2, y2)) + " vs " + r1 + r2);
 				return true;
 			}
 			else

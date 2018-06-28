@@ -39,10 +39,7 @@ public class MainMenuNew : MonoBehaviour {
         }
 
 	    public void  PlayCampaign (){
-		    areYouSure.gameObject.active = false;
-		    continueBtn.gameObject.active = true;
-		    newGameBtn.gameObject.active = true;
-		    loadGameBtn.gameObject.active = true;
+            SceneManager.LoadScene("MovementAndCameraTest");
 	    }
 
 	    public void  DisablePlayCampaign (){

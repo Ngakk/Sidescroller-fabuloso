@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Mangos
 {
@@ -39,6 +40,7 @@ namespace Mangos
         private bool blinkAvailable;
         public bool facingRight;
         List<ContactPoint> objectsTouched = new List<ContactPoint>();
+        public int life = 100;
 
         void Awake()
         {
@@ -75,7 +77,7 @@ namespace Mangos
             }
             else
             {
-                blinkPosition = Vector3.Scale(Input.mousePosition - cam.WorldToScreenPoint(EmptyBlink.transform.position), new Vector3(1f, 1f, 0f)).normalized * 2f;
+                blinkPosition = Vector3.Scale(Input.mousePosition - cam.WorldToScreenPoint(EmptyBlink.transform.position), new Vector3(1f, 1f, 0f)).normalized * 2;
                 targetPosition = blinkPosition;
             }
             Ray blinkCheckRay = new Ray(EmptyBlink.transform.position, blinkPosition);
@@ -126,6 +128,11 @@ namespace Mangos
                 jumpCount++;
                 if (jumpCount <= 1)
                     jumpReq = true;
+            }
+
+            if(life <= 0)
+            {
+                SceneManager.LoadScene(3);
             }
         }
 

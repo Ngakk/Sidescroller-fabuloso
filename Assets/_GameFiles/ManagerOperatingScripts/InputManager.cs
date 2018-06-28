@@ -17,9 +17,9 @@ namespace Mangos {
 			case GameState.mainGame:
                     shootAxis = Input.GetAxis("ShootTrigger");
 
-                    if (Input.GetKeyDown(KeyCode.Q) || Input.GetKey(KeyCode.JoystickButton4))
+                    if (Input.GetKeyDown(KeyCode.Q) || Input.GetKeyDown(KeyCode.JoystickButton4))
                         StaticManager.weaponManager.PreviousWeapon();
-                    if (Input.GetKeyDown(KeyCode.E) || Input.GetKey(KeyCode.JoystickButton5))
+                    if (Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.JoystickButton5))
                         StaticManager.weaponManager.NextWeapon();
 
                     if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.JoystickButton2))

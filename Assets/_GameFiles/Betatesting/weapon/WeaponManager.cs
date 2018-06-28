@@ -7,7 +7,7 @@ namespace Mangos
     public class WeaponManager : MonoBehaviour
     {
         public List<Weapon> myWeapons;
-        int currentWeaponId;
+        public int currentWeaponId;
 
         void Awake()
         {

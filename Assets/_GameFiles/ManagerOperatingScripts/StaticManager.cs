@@ -41,6 +41,8 @@ namespace Mangos {
         public static playerMovement_SideScroller3D playerScript;
         public static WeaponManager weaponManager;
         public static MainMenuNew MainMenu;
+        public static aranaScript aranaScript;
+        public static HUD_Manager HUD_Script;
     }
 
 }
